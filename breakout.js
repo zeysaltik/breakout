@@ -61,17 +61,42 @@ window.onload = function () {
     requestAnimationFrame(update)
     document.addEventListener("keydown", movePlayer)
 
-    document.getElementById("left-button").addEventListener("click", function () {
-        let nextPlayerX = player.x - player.velocityX
-        if (!outOfBounds(nextPlayerX)) {
-            player.x = nextPlayerX
-        }
+    // document.getElementById("left-button").addEventListener("click", function () {
+    //     let nextPlayerX = player.x - player.velocityX
+    //     if (!outOfBounds(nextPlayerX)) {
+    //         player.x = nextPlayerX
+    //     }
+    // })
+    // document.getElementById("right-button").addEventListener("click", function () {
+    //     let nextPlayerX = player.x + player.velocityX
+    //     if (!outOfBounds(nextPlayerX)) {
+    //         player.x = nextPlayerX
+    //     }
+    // })
+    document.getElementById("left-button").addEventListener("mousedown", function () {
+        player.velocityX = -playerVelocityX
+        movePlayerInterval = setInterval(() => {
+            let nextPlayerX = player.x + player.velocityX
+            if (!outOfBounds(nextPlayerX)) {
+                player.x = nextPlayerX
+            }
+        }, 100)
     })
-    document.getElementById("right-button").addEventListener("click", function () {
-        let nextPlayerX = player.x + player.velocityX
-        if (!outOfBounds(nextPlayerX)) {
-            player.x = nextPlayerX
-        }
+    document.getElementById("left-button").addEventListener("mouseup", function () {
+        clearInterval(movePlayerInterval)
+    })
+    
+    document.getElementById("right-button").addEventListener("mousedown", function () {
+        player.velocityX = playerVelocityX
+        movePlayerInterval = setInterval(() => {
+            let nextPlayerX = player.x + player.velocityX
+            if (!outOfBounds(nextPlayerX)) {
+                player.x = nextPlayerX
+            }
+        }, 100)
+    })
+    document.getElementById("right-button").addEventListener("mouseup", function () {
+        clearInterval(movePlayerInterval)
     })
 
     //! create blocks
