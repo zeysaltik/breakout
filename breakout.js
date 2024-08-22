@@ -58,7 +58,6 @@ window.onload = function () {
     context.fillStyle = "red"
     context.fillRect(player.x, player.y, player.width, player.height)
 
-    requestAnimationFrame(update)
     document.addEventListener("keydown", movePlayer)
 
     // document.getElementById("left-button").addEventListener("click", function () {
@@ -73,36 +72,62 @@ window.onload = function () {
     //         player.x = nextPlayerX
     //     }
     // })
-    document.getElementById("left-button").addEventListener("mousedown", function () {
-        player.velocityX = -playerVelocityX
-        movePlayerInterval = setInterval(() => {
-            let nextPlayerX = player.x + player.velocityX
-            if (!outOfBounds(nextPlayerX)) {
-                player.x = nextPlayerX
-            }
-        }, 100)
-    })
-    document.getElementById("left-button").addEventListener("mouseup", function () {
-        clearInterval(movePlayerInterval)
-    })
-    
-    document.getElementById("right-button").addEventListener("mousedown", function () {
-        player.velocityX = playerVelocityX
-        movePlayerInterval = setInterval(() => {
-            let nextPlayerX = player.x + player.velocityX
-            if (!outOfBounds(nextPlayerX)) {
-                player.x = nextPlayerX
-            }
-        }, 100)
-    })
-    document.getElementById("right-button").addEventListener("mouseup", function () {
-        clearInterval(movePlayerInterval)
-    })
+    // document.getElementById("left-button").addEventListener("mousedown", function () {
+    //     player.velocityX = -playerVelocityX
+    //     movePlayerInterval = setInterval(() => {
+    //         let nextPlayerX = player.x + player.velocityX
+    //         if (!outOfBounds(nextPlayerX)) {
+    //             player.x = nextPlayerX
+    //         }
+    //     }, 100)
+    // })
+    // document.getElementById("left-button").addEventListener("mouseup", function () {
+    //     clearInterval(movePlayerInterval)
+    // })
+
+    // document.getElementById("right-button").addEventListener("mousedown", function () {
+    //     player.velocityX = playerVelocityX
+    //     movePlayerInterval = setInterval(() => {
+    //         let nextPlayerX = player.x + player.velocityX
+    //         if (!outOfBounds(nextPlayerX)) {
+    //             player.x = nextPlayerX
+    //         }
+    //     }, 100)
+    // })
+    // document.getElementById("right-button").addEventListener("mouseup", function () {
+    //     clearInterval(movePlayerInterval)
+    // })
+
+    // Mobile controls
+    document.getElementById("left-button").addEventListener("touchstart", function () {
+        player.velocityX = -playerVelocityX;
+        movePlayerInterval = setInterval(movePlayerOnTouch, 100);
+    });
+    document.getElementById("left-button").addEventListener("touchend", function () {
+        clearInterval(movePlayerInterval);
+        player.velocityX = 0;
+    });
+
+    document.getElementById("right-button").addEventListener("touchstart", function () {
+        player.velocityX = playerVelocityX;
+        movePlayerInterval = setInterval(movePlayerOnTouch, 100);
+    });
+    document.getElementById("right-button").addEventListener("touchend", function () {
+        clearInterval(movePlayerInterval);
+        player.velocityX = 0;
+    });
 
     //! create blocks
     createBlocks()
 }
+function movePlayerOnTouch() {
+    let nextPlayerX = player.x + player.velocityX;
+    if (!outOfBounds(nextPlayerX)) {
+        player.x = nextPlayerX;
+    }
+}
 
+requestAnimationFrame(update)
 function update() {
     requestAnimationFrame(update)
     if (gameOver) {
@@ -174,6 +199,14 @@ function update() {
     context.fillText(score, 10, 25)
 }
 
+function resize() {
+    board.height = window.innerHeight;
+    board.width = window.innerWidth;
+    boardWidth = board.width;
+    boardHeight = board.height;
+}
+
+window.addEventListener("resize", resize);
 
 function outOfBounds(xPosition) {
     return (xPosition < 0 || xPosition + playerWidth > boardWidth)
@@ -260,7 +293,7 @@ function resetGame() {
         velocityY: ballVelocityY
     }
     blockArray = []
-    blockRows= 3
+    blockRows = 3
     score = 0
     createBlocks()
 
